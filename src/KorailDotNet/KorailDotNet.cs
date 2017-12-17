@@ -19,15 +19,30 @@ namespace KorailDotNet {
         MemberNumber = 5
     }
 
+    // 00 Formatting
+    public enum TrainType {
+        KTX = 0,
+        Samaeul = 1,
+        Mugunghwa = 2,
+        Tonggun = 3,
+        Nuriro = 4,
+        All = 5,
+        Airport = 6,
+        KTX_SanCheon = 7,
+        ITX_Samaeul = 8,
+        ITX_ChengChun = 9
+    }
+
     internal enum UriType {
-        Login
+        Login,
+        SearchTrain
     }
 
     public class KorailDotNet {
-        private const String LOGIN_DO_URI = "http://www.letskorail.com/korail/com/login.do";
         private const String KORAIL_URL = "https://smart.letskorail.com/";
         private const String MOBILE_PATH = "classes/com.korail.mobile";
         private const String LOGIN_URI = ".login.Login";
+        private const String SEARCH_TRAIN_URI = ".seatMovie.ScheduleView";
         private const int BUFFER_CAPACITY = 1 * 1024 * 100; // 100 kilo bytes
 
         public LoginType LoginType { get; private set; }
@@ -51,7 +66,7 @@ namespace KorailDotNet {
 
             // "Device=AD&Version=150718001&txtInputFlg=4&txtMemberNo=010-2966-5905&txtPwd=a141141E%21"
 
-            var response = JsonConvert.DeserializeObject<SessionResponse>(RequestMessage(uri, data));
+            var response = JsonConvert.DeserializeObject<SessionResponse>(SendPost(uri, data));
             
             // 정상인 경우
             if(response.MessageCode == "IRZ000001") {
@@ -63,7 +78,26 @@ namespace KorailDotNet {
             }
         }
 
-        private String RequestMessage(String uri, String data) {
+        public void SearchTrain(TrainType trainType, String abroad, String goff, DateTime dateTime) {
+            SessionChecker();
+            
+            String train = $"{(int)trainType:D2}";
+
+            Console.WriteLine(train);
+
+        }
+
+        private void SessionChecker() {
+            if (HasSession == false) {
+                throw new Exception("There is no session. First, execute 'create session'");
+            }
+        }
+        
+        private String SendGet(String uri, String data) {
+            return null;
+        }
+
+        private String SendPost(String uri, String data) {
             var request = HttpWebRequest.Create(uri) as HttpWebRequest;
             var buffer = Encoding.UTF8.GetBytes(data);
 
@@ -97,6 +131,8 @@ namespace KorailDotNet {
             switch(type) {
                 case UriType.Login:
                     sb.Append(LOGIN_URI);
+                    break;
+                case UriType.SearchTrain:
                     break;
             }
             

@@ -51,8 +51,7 @@ namespace KorailDotNet {
 
         [JsonProperty("strAbrdStnNm")]
         public String AbroadStationName { get; set; }
-
-
+        
         [JsonProperty("strGoffStnNm")]
         public String GoffStationName { get; set; }
 

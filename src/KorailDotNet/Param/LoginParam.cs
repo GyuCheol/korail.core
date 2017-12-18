@@ -7,12 +7,6 @@ using System.Threading.Tasks;
 
 namespace KorailDotNet.Param {
 
-    public enum LoginType {
-        Email = 2,
-        PhoneNumber = 4,
-        MemberNumber = 5
-    }
-
     public class LoginParam: BaseParam {
 
         [FormData("txtPwd")]

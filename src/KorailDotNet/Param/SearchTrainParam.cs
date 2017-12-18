@@ -7,20 +7,6 @@ using System.Threading.Tasks;
 
 namespace KorailDotNet.Param {
 
-    // 00 Formatting
-    public enum TrainType {
-        KTX = 100,
-        Samaeul = 101,
-        Mugunghwa = 102,
-        Tonggun = 103,
-        Nuriro = 102,
-        Airport = 105,
-        KTX_SanCheon = 100,
-        ITX_Samaeul = 101,
-        ITX_ChengChun = 104,
-        All = 109,
-    }
-
     public class SearchTrainParam: BaseParam {
 
         [FormData("radJobId")]

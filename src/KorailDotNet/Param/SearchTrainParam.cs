@@ -6,79 +6,97 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace KorailDotNet.Param {
-    public class SearchTrainParam {
 
-        [FormDataName("Device")]
-        public readonly String Device = "AD";
+    // 00 Formatting
+    public enum TrainType {
+        KTX = 0,
+        Samaeul = 1,
+        Mugunghwa = 2,
+        Tonggun = 3,
+        Nuriro = 4,
+        All = 5,
+        Airport = 6,
+        KTX_SanCheon = 7,
+        ITX_Samaeul = 8,
+        ITX_ChengChun = 9
+    }
 
-        [FormDataName("radJobId")]
-        public readonly String RadJobId = "1";
+    public class SearchTrainParam: BaseParam {
 
-        [FormDataName("txtCardPsgCnt")]
-        public readonly String CardPsgCount = "0";
+        [FormData("Device")]
+        public String Device => "AD";
 
-        [FormDataName("txtGdNo")]
-        public readonly String GdNo = "";
+        [FormData("Version")]
+        public String Version => "150718001ske";
 
-        [FormDataName("txtJobDv")]
-        public readonly String JobDv = "";
+        [FormData("radJobId")]
+        public String RadJobId => "1";
 
-        [FormDataName("txtMenuId")]
-        public readonly String MenuId = "11";
+        [FormData("txtCardPsgCnt")]
+        public String CardPsgCount => "0";
 
-        [FormDataName("Version")]
-        public readonly String Version = "150718001";
+        [FormData("txtGdNo")]
+        public String GdNo => "";
 
-        [FormDataName("selGoTrain")]
-        public TrainType TrainType;
+        [FormData("txtJobDv")]
+        public String JobDv => "";
 
-        [FormDataName("txtTrnGpCd")]
-        public TrainType TrainGroupCode;
+        [FormData("txtMenuId")]
+        public String MenuId => "11";
 
-        [FormDataName("txtGoStart")]
-        public String AbroadStationName;
+        [FormData("selGoTrain")]
+        public TrainType TrainType { get; set; }
 
-        [FormDataName("txtGoEnd")]
-        public String GoffStationName;
+        [FormData("txtGoStart")]
+        public String AbroadStationName { get; set; }
 
-        [FormDataName("txtPsgFlg_1")]
-        public int AdultCount;
+        [FormData("txtGoEnd")]
+        public String GoffStationName { get; set; }
 
-        [FormDataName("txtPsgFlg_2")]
-        public int ChildCount;
+        [FormData("txtPsgFlg_1")]
+        public int AdultCount { get; set; }
 
-        [FormDataName("txtPsgFlg_3")]
-        public int SeniorCount;
+        [FormData("txtPsgFlg_2")]
+        public int ChildCount { get; set; }
 
-        [FormDataName("txtPsgFlg_4")]
-        public int Disabled1Count;
+        [FormData("txtPsgFlg_3")]
+        public int SeniorCount { get; set; }
 
-        [FormDataName("txtPsgFlg_5")]
-        public int Disabled2Count;
+        [FormData("txtPsgFlg_4")]
+        public int Disabled1Count { get; set; }
 
-        [FormDataName("txtSeatAttCd_2")]
-        public readonly int SearAttCode2 = 0;
+        [FormData("txtPsgFlg_5")]
+        public int Disabled2Count { get; set; }
 
-        [FormDataName("txtSeatAttCd_3")]
-        public readonly int SearAttCode3 = 0;
+        [FormData("txtSeatAttCd_2")]
+        public int SearAttCode2 => 0;
 
-        [FormDataName("txtSeatAttCd_4")]
-        public readonly int SearAttCode4 = 0;
+        [FormData("txtSeatAttCd_3")]
+        public int SearAttCode3 => 0;
+
+        [FormData("txtSeatAttCd_4")]
+        public int SearAttCode4 => 0;
 
         public DateTime TrainStartDateTime;
 
-
-        [FormDataName("txtGoAbrdDt")]
+        [FormData("txtGoAbrdDt")]
         public String Date {
             get {
                 return $"{TrainStartDateTime:yyyyMMdd}";
             }
         }
 
-        [FormDataName("txtGoHour")]
+        [FormData("txtGoHour")]
         public String Hour {
             get {
                 return $"{TrainStartDateTime:HHmmss}";
+            }
+        }
+
+        [FormData("txtTrnGpCd")]
+        public TrainType TrainGroupCode {
+            get {
+                return TrainType;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using KorailDotNet.Param;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,26 +13,6 @@ using System.Threading.Tasks;
 using System.Web;
 
 namespace KorailDotNet {
-
-    public enum LoginType {
-        Email = 2,
-        PhoneNumber = 4,
-        MemberNumber = 5
-    }
-
-    // 00 Formatting
-    public enum TrainType {
-        KTX = 0,
-        Samaeul = 1,
-        Mugunghwa = 2,
-        Tonggun = 3,
-        Nuriro = 4,
-        All = 5,
-        Airport = 6,
-        KTX_SanCheon = 7,
-        ITX_Samaeul = 8,
-        ITX_ChengChun = 9
-    }
 
     internal enum UriType {
         Login,
@@ -50,22 +31,19 @@ namespace KorailDotNet {
         public String Password { get; private set; }
         public bool HasSession { get; private set; }
 
+        private LoginParam loginParam;
         private CookieContainer cookieContainer;
 
-        public KorailDotNet(LoginType type, String id, String pw) {
-            this.LoginType = type;
-            this.MemberId = id;
-            this.Password = pw;
+        public KorailDotNet(LoginParam loginParam) {
+            this.loginParam = loginParam;
 
             cookieContainer = new CookieContainer();
         }
 
         public void CreateSession() {
             String uri = GetURI(UriType.Login);
-            String data = $"Device=AD&Version=150718001&txtInputFlg={(int) LoginType}&txtMemberNo={ HttpUtility.UrlEncode(MemberId)}&txtPwd={ HttpUtility.UrlEncode(Password)}";
-
-            // "Device=AD&Version=150718001&txtInputFlg=4&txtMemberNo=010-2966-5905&txtPwd=a141141E%21"
-
+            String data = ParamToFormData.TransferFormData(loginParam);
+            
             var response = JsonConvert.DeserializeObject<SessionResponse>(SendPost(uri, data));
             
             // 정상인 경우
@@ -78,12 +56,12 @@ namespace KorailDotNet {
             }
         }
 
-        public void SearchTrain(TrainType trainType, String abroad, String goff, DateTime dateTime) {
+        public void SearchTrain(SearchTrainParam searchParam) {
             SessionChecker();
             
-            String train = $"{(int)trainType:D2}";
+            //String train = $"{(int)trainType:D2}";
 
-            Console.WriteLine(train);
+            //Console.WriteLine(train);
 
         }
 

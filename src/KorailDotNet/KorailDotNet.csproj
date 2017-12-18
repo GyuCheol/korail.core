@@ -45,12 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\FormDataAttribute.cs" />
+    <Compile Include="Attributes\FormDataFormatAttribute.cs" />
     <Compile Include="KorailDotNet.cs" />
+    <Compile Include="Param\BaseParam.cs" />
+    <Compile Include="Param\LoginParam.cs" />
+    <Compile Include="Param\ParamToFormData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Param\SearchTrainParam.cs" />
     <Compile Include="SessionResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

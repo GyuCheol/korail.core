@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KorailDotNet {
+namespace KorailDotNet.Response {
 
     [JsonObject(MemberSerialization.OptIn)]
     public class SessionResponse {
@@ -47,16 +47,16 @@ namespace KorailDotNet {
         public String Email { get; set; }
 
         [JsonProperty("strAbrdStnCd")]
-        public String AbroadStationCode { get; set; }
+        public String StartStationCode { get; set; }
 
         [JsonProperty("strAbrdStnNm")]
-        public String AbroadStationName { get; set; }
+        public String StartStationName { get; set; }
         
         [JsonProperty("strGoffStnNm")]
-        public String GoffStationName { get; set; }
+        public String EndStationName { get; set; }
 
         [JsonProperty("strGoffStnCd")]
-        public String GoffStationNCode { get; set; }
+        public String EndStationCode { get; set; }
 
 
     }

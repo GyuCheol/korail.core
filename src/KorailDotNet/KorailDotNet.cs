@@ -1,4 +1,5 @@
 ﻿using KorailDotNet.Param;
+using KorailDotNet.Response;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -58,11 +59,12 @@ namespace KorailDotNet {
 
         public void SearchTrain(SearchTrainParam searchParam) {
             SessionChecker();
-            
-            //String train = $"{(int)trainType:D2}";
 
-            //Console.WriteLine(train);
+            String data = ParamToFormData.TransferFormData(searchParam);
 
+            var str = SendGet($"{GetURI(UriType.SearchTrain)}?{data}");
+
+            Console.WriteLine(str);
         }
 
         private void SessionChecker() {
@@ -71,8 +73,17 @@ namespace KorailDotNet {
             }
         }
         
-        private String SendGet(String uri, String data) {
-            return null;
+        private String SendGet(String uri) {
+            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
+
+            request.Method = "GET";
+            request.CookieContainer = cookieContainer;
+            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 5.1.1; Nexus 4 Build/LMY48T)";
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            var response = request.GetResponse();
+
+            return GetResponseString(0, response.GetResponseStream());
         }
 
         private String SendPost(String uri, String data) {
@@ -111,6 +122,7 @@ namespace KorailDotNet {
                     sb.Append(LOGIN_URI);
                     break;
                 case UriType.SearchTrain:
+                    sb.Append(SEARCH_TRAIN_URI);
                     break;
             }
             

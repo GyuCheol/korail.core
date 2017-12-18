@@ -51,9 +51,12 @@ namespace KorailDotNet.Tests {
             // Act
             korailDotNet.CreateSession();
 
-            //korailDotNet.SearchTrain(TrainType.KTX, "수원", "동대구", DateTime.Now);
-            //korailDotNet.SearchTrain(TrainType.Samaeul, "수원", "천안", DateTime.Now);
-
+            korailDotNet.SearchTrain(new SearchTrainParam() {
+                StartStation = "서울",
+                AdultCount = 1,
+                EndStation = "동대구",
+                TrainStartDateTime = new DateTime(2017, 12, 20, 14, 40, 0),
+            });
             // Assert
         }
 
@@ -73,7 +76,6 @@ namespace KorailDotNet.Tests {
                 var attributes = field.GetCustomAttributes(typeof(FormDataAttribute), false);
 
                 foreach (var attr in attributes) {
-
                     Console.WriteLine(attr);
                 }
 

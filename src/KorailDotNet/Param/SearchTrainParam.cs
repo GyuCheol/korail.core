@@ -9,25 +9,19 @@ namespace KorailDotNet.Param {
 
     // 00 Formatting
     public enum TrainType {
-        KTX = 0,
-        Samaeul = 1,
-        Mugunghwa = 2,
-        Tonggun = 3,
-        Nuriro = 4,
-        All = 5,
-        Airport = 6,
-        KTX_SanCheon = 7,
-        ITX_Samaeul = 8,
-        ITX_ChengChun = 9
+        KTX = 100,
+        Samaeul = 101,
+        Mugunghwa = 102,
+        Tonggun = 103,
+        Nuriro = 102,
+        Airport = 105,
+        KTX_SanCheon = 100,
+        ITX_Samaeul = 101,
+        ITX_ChengChun = 104,
+        All = 109,
     }
 
     public class SearchTrainParam: BaseParam {
-
-        [FormData("Device")]
-        public String Device => "AD";
-
-        [FormData("Version")]
-        public String Version => "150718001ske";
 
         [FormData("radJobId")]
         public String RadJobId => "1";
@@ -43,15 +37,13 @@ namespace KorailDotNet.Param {
 
         [FormData("txtMenuId")]
         public String MenuId => "11";
-
-        [FormData("selGoTrain")]
-        public TrainType TrainType { get; set; }
+        
 
         [FormData("txtGoStart")]
-        public String AbroadStationName { get; set; }
+        public String StartStation { get; set; }
 
         [FormData("txtGoEnd")]
-        public String GoffStationName { get; set; }
+        public String EndStation { get; set; }
 
         [FormData("txtPsgFlg_1")]
         public int AdultCount { get; set; }
@@ -69,15 +61,17 @@ namespace KorailDotNet.Param {
         public int Disabled2Count { get; set; }
 
         [FormData("txtSeatAttCd_2")]
-        public int SearAttCode2 => 0;
+        public String SearAttCode2 => "000";
 
         [FormData("txtSeatAttCd_3")]
-        public int SearAttCode3 => 0;
+        public String SearAttCode3 => "000";
 
         [FormData("txtSeatAttCd_4")]
-        public int SearAttCode4 => 0;
+        public String SearAttCode4 => "015";
 
         public DateTime TrainStartDateTime;
+
+        public TrainType TrainType { get; set; } = TrainType.All;
 
         [FormData("txtGoAbrdDt")]
         public String Date {
@@ -90,6 +84,13 @@ namespace KorailDotNet.Param {
         public String Hour {
             get {
                 return $"{TrainStartDateTime:HHmmss}";
+            }
+        }
+
+        [FormData("selGoTrain")]
+        public TrainType SelTrainType {
+            get {
+                return TrainType;
             }
         }
 

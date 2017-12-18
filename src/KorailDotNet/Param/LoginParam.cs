@@ -14,11 +14,6 @@ namespace KorailDotNet.Param {
     }
 
     public class LoginParam: BaseParam {
-        [FormData("Device")]
-        public String Device => "AD";
-
-        [FormData("Version")]
-        public String Version => "150718001ske";
 
         [FormData("txtPwd")]
         public String Password { get; set; }

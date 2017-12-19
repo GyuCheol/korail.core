@@ -66,7 +66,7 @@ namespace KorailDotNet {
 
         private void SessionChecker() {
             if (HasSession == false) {
-                throw new Exception("There is no session. First, execute 'create session'");
+                throw new Exception("There is no session. First, execute 'CreateSession'");
             }
         }
         

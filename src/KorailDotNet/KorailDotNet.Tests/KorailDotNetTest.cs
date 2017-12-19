@@ -56,13 +56,16 @@ namespace KorailDotNet.Tests
         [Fact(DisplayName = nameof(SearchTrainTest))]
         public void SearchTrainTest() {
             // Arrange
-            var param = GetLoginParam();
+            var loginParam = GetLoginParam();
+            var searchParam = new SearchTrainParam() {
+            };
 
             // Act
-            korailDotNet.CreateSession(param);
+            korailDotNet.CreateSession(loginParam);
+            korailDotNet.SearchTrain(searchParam);
 
             // Assert
-            
+
         }
 
     }

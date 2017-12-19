@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KorailDotNet", "KorailDotNet\KorailDotNet.csproj", "{7D49B872-45E8-4F91-BB98-8ECCA27FA724}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KorailDotNet.Tests", "KorailDotNet.Tests\KorailDotNet.Tests.csproj", "{9C8A9940-4255-433E-AB64-27B658B7A6E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D49B872-45E8-4F91-BB98-8ECCA27FA724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D49B872-45E8-4F91-BB98-8ECCA27FA724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D49B872-45E8-4F91-BB98-8ECCA27FA724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D49B872-45E8-4F91-BB98-8ECCA27FA724}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8A9940-4255-433E-AB64-27B658B7A6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8A9940-4255-433E-AB64-27B658B7A6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8A9940-4255-433E-AB64-27B658B7A6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8A9940-4255-433E-AB64-27B658B7A6E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {583CB1E3-3613-4BD2-8C17-317C675CE1EC}
+	EndGlobalSection
+EndGlobal

@@ -20,6 +20,11 @@ namespace KorailDotNet {
         SearchTrain
     }
 
+    public enum HttpMethod {
+        POST,
+        GET
+    }
+
     public class KorailDotNet {
         private const String KORAIL_URL = "https://smart.letskorail.com/";
         private const String MOBILE_PATH = "classes/com.korail.mobile";
@@ -43,9 +48,7 @@ namespace KorailDotNet {
 
         public void CreateSession() {
             String uri = GetURI(UriType.Login);
-            String data = ParamToFormData.TransferFormData(loginParam);
-            
-            var response = JsonConvert.DeserializeObject<SessionResponse>(SendPost(uri, data));
+            var response = JsonConvert.DeserializeObject<SessionResponse>(SendMessage(uri, loginParam, HttpMethod.POST));
             
             // 정상인 경우
             if(response.MessageCode == "IRZ000001") {
@@ -59,10 +62,8 @@ namespace KorailDotNet {
 
         public void SearchTrain(SearchTrainParam searchParam) {
             SessionChecker();
-
-            String data = ParamToFormData.TransferFormData(searchParam);
-
-            var str = SendGet($"{GetURI(UriType.SearchTrain)}?{data}");
+            
+            var str = SendMessage(GetURI(UriType.SearchTrain), searchParam, HttpMethod.GET);
 
             Console.WriteLine(str);
         }
@@ -73,28 +74,25 @@ namespace KorailDotNet {
             }
         }
         
-        private String SendGet(String uri) {
-            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
+        private String SendMessage(String uri, BaseParam param, HttpMethod method) {
+            String data = ParamToFormData.TransferFormData(param);
+            // Method가 GET인 경우, uri에 data를 붙인다.
+            if (method == HttpMethod.GET && param != null) {
+                uri += $"?{data}";
+            }
 
-            request.Method = "GET";
+            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
+            
+            request.Method = method.ToString();
             request.CookieContainer = cookieContainer;
             request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 5.1.1; Nexus 4 Build/LMY48T)";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            var response = request.GetResponse();
+            if(method == HttpMethod.POST) {
+                var buffer = Encoding.UTF8.GetBytes(data);
 
-            return GetResponseString(0, response.GetResponseStream());
-        }
-
-        private String SendPost(String uri, String data) {
-            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
-            var buffer = Encoding.UTF8.GetBytes(data);
-
-            request.Method = "POST";
-            request.CookieContainer = cookieContainer;
-            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 5.1.1; Nexus 4 Build/LMY48T)";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.GetRequestStream().Write(buffer, 0, buffer.Length);
+                request.GetRequestStream().Write(buffer, 0, buffer.Length);
+            }
 
             var response = request.GetResponse();
 

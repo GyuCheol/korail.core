@@ -32,21 +32,15 @@ namespace KorailDotNet {
         private const String SEARCH_TRAIN_URI = ".seatMovie.ScheduleView";
         private const int BUFFER_CAPACITY = 1 * 1024 * 100; // 100 kilo bytes
 
-        public LoginType LoginType { get; private set; }
-        public String MemberId { get; private set; }
-        public String Password { get; private set; }
         public bool HasSession { get; private set; }
-
-        private LoginParam loginParam;
+        
         private CookieContainer cookieContainer;
 
-        public KorailDotNet(LoginParam loginParam) {
-            this.loginParam = loginParam;
-
+        public KorailDotNet() {
             cookieContainer = new CookieContainer();
         }
 
-        public void CreateSession() {
+        public void CreateSession(LoginParam loginParam) {
             String uri = GetURI(UriType.Login);
             var response = JsonConvert.DeserializeObject<SessionResponse>(SendMessage(uri, loginParam, HttpMethod.POST));
             
@@ -62,10 +56,12 @@ namespace KorailDotNet {
 
         public void SearchTrain(SearchTrainParam searchParam) {
             SessionChecker();
-            
+
             var str = SendMessage(GetURI(UriType.SearchTrain), searchParam, HttpMethod.GET);
 
             Console.WriteLine(str);
+
+            throw new NotImplementedException();
         }
 
         private void SessionChecker() {

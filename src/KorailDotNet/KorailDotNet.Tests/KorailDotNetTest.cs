@@ -7,10 +7,10 @@ namespace KorailDotNet.Tests
 
     public class KorailDotNetTest
     {
-        private KorailDotNet korailDotNet;
+        private KorailDotNet korail;
 
         public KorailDotNetTest() {
-            this.korailDotNet = new KorailDotNet();
+            this.korail = new KorailDotNet();
         }
 
         private LoginParam GetLoginParam() {
@@ -27,10 +27,10 @@ namespace KorailDotNet.Tests
             var param = GetLoginParam();
 
             // Act
-            korailDotNet.CreateSession(param);
+            korail.CreateSession(param);
 
             // Assert
-            Assert.Equal(true, korailDotNet.HasSession);
+            Assert.Equal(true, korail.HasSession);
         }
 
         [Fact(DisplayName = nameof(LoginFailTest))]
@@ -43,13 +43,13 @@ namespace KorailDotNet.Tests
 
             // Act
             try {
-                korailDotNet.CreateSession(param);
+                korail.CreateSession(param);
             } catch (Exception) {
                 isError = true;
             }
 
             // Assert
-            Assert.Equal(false, korailDotNet.HasSession);
+            Assert.Equal(false, korail.HasSession);
             Assert.Equal(true, isError);
         }
 
@@ -58,14 +58,32 @@ namespace KorailDotNet.Tests
             // Arrange
             var loginParam = GetLoginParam();
             var searchParam = new SearchTrainParam() {
+                AdultCount = 1,
+                StartStation = Station.Seoul,
+                EndStation = Station.Busan,
+                TrainType = TrainType.KTX,
+                TrainStartDateTime = DateTime.Now
             };
 
             // Act
-            korailDotNet.CreateSession(loginParam);
-            korailDotNet.SearchTrain(searchParam);
+            korail.CreateSession(loginParam);
+            korail.SearchTrain(searchParam);
 
             // Assert
 
+        }
+
+        [Fact(DisplayName = nameof(LogoutTest))]
+        public void LogoutTest() {
+            // Arrange
+            var loginParam = GetLoginParam();
+
+            // Act
+            korail.CreateSession(loginParam);
+            korail.CloseSession();
+
+            // Assert
+            Assert.Equal(false, korail.HasSession);
         }
 
     }

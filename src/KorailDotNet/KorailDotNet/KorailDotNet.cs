@@ -17,7 +17,8 @@ namespace KorailDotNet {
 
     internal enum UriType {
         Login,
-        SearchTrain
+        SearchTrain,
+        Logout
     }
 
     public enum HttpMethod {
@@ -26,10 +27,12 @@ namespace KorailDotNet {
     }
 
     public class KorailDotNet {
-        private const String KORAIL_URL = "https://smart.letskorail.com/";
+        private const String KORAIL_URL = "https://smart.letskorail.com:443/";
         private const String MOBILE_PATH = "classes/com.korail.mobile";
         private const String LOGIN_URI = ".login.Login";
         private const String SEARCH_TRAIN_URI = ".seatMovie.ScheduleView";
+        public const String LOGOUT_URI = ".common.logout";
+
         private const int BUFFER_CAPACITY = 1 * 1024 * 100; // 100 kilo bytes
 
         public bool HasSession { get; private set; }
@@ -41,11 +44,12 @@ namespace KorailDotNet {
         }
 
         public void CreateSession(LoginParam loginParam) {
-            String uri = GetURI(UriType.Login);
-            var response = JsonConvert.DeserializeObject<SessionResponse>(SendMessage(uri, loginParam, HttpMethod.POST));
-            
+            var uri = GetURI(UriType.Login);
+            var response = SendMessage(uri, loginParam, HttpMethod.POST);
+            var responseModel = JsonConvert.DeserializeObject<SessionResponse>(response);
+
             // 정상인 경우
-            if(response.MessageCode == "IRZ000001") {
+            if (responseModel.MessageCode == "IRZ000001") {
                 HasSession = true;
             } else {
                 HasSession = false;
@@ -54,10 +58,22 @@ namespace KorailDotNet {
             }
         }
 
+        public void CloseSession() {
+            if(HasSession) {
+                var uri = GetURI(UriType.Logout);
+                var response = SendMessage(uri, null, HttpMethod.GET);
+
+                Console.WriteLine(response);
+
+                HasSession = false;
+            }
+        }
+
         public void SearchTrain(SearchTrainParam searchParam) {
             SessionChecker();
 
-            var str = SendMessage(GetURI(UriType.SearchTrain), searchParam, HttpMethod.GET);
+            var uri = GetURI(UriType.SearchTrain);
+            var str = SendMessage(uri, searchParam, HttpMethod.GET);
 
             Console.WriteLine(str);
 
@@ -72,19 +88,20 @@ namespace KorailDotNet {
         
         private String SendMessage(String uri, BaseParam param, HttpMethod method) {
             String data = ParamToFormData.TransferFormData(param);
+
             // Method가 GET인 경우, uri에 data를 붙인다.
-            if (method == HttpMethod.GET && param != null) {
+            if (method == HttpMethod.GET && !String.IsNullOrWhiteSpace(data)) {
                 uri += $"?{data}";
             }
-
-            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
             
-            request.Method = method.ToString();
+            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
+
             request.CookieContainer = cookieContainer;
+            request.Method = method.ToString();
             request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 5.1.1; Nexus 4 Build/LMY48T)";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            if(method == HttpMethod.POST) {
+            if (method == HttpMethod.POST && !String.IsNullOrWhiteSpace(data)) {
                 var buffer = Encoding.UTF8.GetBytes(data);
 
                 request.GetRequestStream().Write(buffer, 0, buffer.Length);
@@ -117,6 +134,9 @@ namespace KorailDotNet {
                     break;
                 case UriType.SearchTrain:
                     sb.Append(SEARCH_TRAIN_URI);
+                    break;
+                case UriType.Logout:
+                    sb.Append(LOGOUT_URI);
                     break;
             }
             

@@ -12,31 +12,35 @@ namespace KorailDotNet.Param {
 
         public static String TransferFormData(BaseParam param) {
             var sb = new StringBuilder();
-            var type = param.GetType();
-            var properties = type.GetProperties();
-            
-            foreach (var property in properties) {
-                var attributes = property.GetCustomAttributes(typeof(FormDataAttribute), false);
 
-                if (attributes.Length == 1) {
-                    var formData = attributes[0] as FormDataAttribute;
-                    var value = property.GetValue(param);
-                    sb.Append(formData.ColumnName);
-                    sb.Append("=");
+            // param 인스턴스가 생성된 경우
+            if(param != null) {
+                var type = param.GetType();
+                var properties = type.GetProperties();
 
-                    // Enum은 int화하여 넣는다.
-                    if(property.PropertyType.BaseType.Name == "Enum") {
-                        int? integer = Convert.ChangeType(value, typeof(int)) as int?;
+                foreach (var property in properties) {
+                    var attributes = property.GetCustomAttributes(typeof(FormDataAttribute), false);
 
-                        if(integer != null) {
-                            sb.Append(integer.Value.ToString());
+                    if (attributes.Length == 1) {
+                        var formData = attributes[0] as FormDataAttribute;
+                        var value = property.GetValue(param);
+                        sb.Append(formData.ColumnName);
+                        sb.Append("=");
+
+                        // Enum은 int화하여 넣는다.
+                        if (property.PropertyType.BaseType.Name == "Enum") {
+                            int? integer = Convert.ChangeType(value, typeof(int)) as int?;
+
+                            if (integer != null) {
+                                sb.Append(integer.Value.ToString());
+                            }
+
+                        } else {
+                            sb.Append(HttpUtility.UrlEncode(value.ToString()));
                         }
 
-                    } else {
-                        sb.Append(HttpUtility.UrlEncode(value.ToString()));
+                        sb.Append("&");
                     }
-
-                    sb.Append("&");
                 }
             }
             

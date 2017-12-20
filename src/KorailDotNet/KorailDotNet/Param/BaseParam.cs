@@ -25,6 +25,42 @@ namespace KorailDotNet.Param {
         ITX_ChengChun = 104,
         All = 109,
     }
+
+    public enum Station {
+        Seoul,
+        YongSan,
+        GwangMyeong,
+        YeongDeungPo,
+        Suwon,
+        PyeongTak,
+        CheonAnAsan,
+        CheonAn,
+        Osong,
+        JoChiWon,
+        DaeJeon,
+        SeoDaeJeon,
+        KimCheonKumi,
+        Kumi,
+        DongDaegu,
+        Daegu,
+        UlSan,
+        PoHang,
+        GyeongSan,
+        MillYang,
+        Busan,
+        ShinGyeongJu,
+        KooPo,
+        JinBoo,
+        KangNeung,
+        IkSan,
+        JeonJu,
+        ChangWonJongAng,
+        PeongChang,
+        GwangJuSongJeong,
+        MokPo,
+        SunCheon,
+        CheongNyangRi
+    }
     
     public abstract class BaseParam {
         [FormData("Device")]

@@ -24,13 +24,6 @@ namespace KorailDotNet.Param {
         [FormData("txtMenuId")]
         public String MenuId => "11";
         
-
-        [FormData("txtGoStart")]
-        public String StartStation { get; set; }
-
-        [FormData("txtGoEnd")]
-        public String EndStation { get; set; }
-
         [FormData("txtPsgFlg_1")]
         public int AdultCount { get; set; }
 
@@ -55,9 +48,27 @@ namespace KorailDotNet.Param {
         [FormData("txtSeatAttCd_4")]
         public String SearAttCode4 => "015";
 
+        public Station StartStation { get; set; }
+        
+        public Station EndStation { get; set; }
+
         public DateTime TrainStartDateTime;
 
         public TrainType TrainType { get; set; } = TrainType.All;
+
+        [FormData("txtGoStart")]
+        public String StartStationName {
+            get {
+                return GetStation(StartStation);
+            }
+        }
+
+        [FormData("txtGoEnd")]
+        public String EndStationName {
+            get {
+                return GetStation(EndStation);
+            }
+        }
 
         [FormData("txtGoAbrdDt")]
         public String Date {
@@ -84,6 +95,17 @@ namespace KorailDotNet.Param {
         public TrainType TrainGroupCode {
             get {
                 return TrainType;
+            }
+        }
+
+        private static String GetStation(Station station) {
+            switch(station) {
+                case Station.Seoul:
+                    return "서울";
+                case Station.Busan:
+                    return "부산";
+                default:
+                    return null;
             }
         }
 

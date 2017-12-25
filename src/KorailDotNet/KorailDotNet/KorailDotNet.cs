@@ -1,4 +1,5 @@
-﻿using KorailDotNet.Param;
+﻿using KorailDotNet.Exception;
+using KorailDotNet.Param;
 using KorailDotNet.Response;
 using Newtonsoft.Json;
 using System;
@@ -43,9 +44,9 @@ namespace KorailDotNet {
             cookieContainer = new CookieContainer();
         }
 
-        public void CreateSession(LoginParam loginParam) {
+        public void Login(LoginParam loginParam) {
             var uri = GetURI(UriType.Login);
-            var response = SendMessage(uri, loginParam, HttpMethod.POST);
+            var response = SendPost(uri, loginParam);
             var responseModel = JsonConvert.DeserializeObject<SessionResponse>(response);
 
             // 정상인 경우
@@ -54,18 +55,18 @@ namespace KorailDotNet {
             } else {
                 HasSession = false;
                 // 로그인 에러
-                throw new Exception("Not matched the id and password.");
+                throw new NotMatchedIdPwdException();
             }
         }
 
-        public void CloseSession() {
+        public void Logout() {
             if(HasSession) {
                 var uri = GetURI(UriType.Logout);
-                var response = SendMessage(uri, null, HttpMethod.GET);
-
-                Console.WriteLine(response);
+                var response = SendGet(uri, null);
 
                 HasSession = false;
+            } else {
+                throw new NeedLoginException();
             }
         }
 
@@ -73,7 +74,7 @@ namespace KorailDotNet {
             SessionChecker();
 
             var uri = GetURI(UriType.SearchTrain);
-            var str = SendMessage(uri, searchParam, HttpMethod.GET);
+            var str = SendGet(uri, searchParam);
 
             Console.WriteLine(str);
 
@@ -82,26 +83,42 @@ namespace KorailDotNet {
 
         private void SessionChecker() {
             if (HasSession == false) {
-                throw new Exception("There is no session. First, execute 'CreateSession'");
+                throw new NeedLoginException();
             }
         }
         
-        private String SendMessage(String uri, BaseParam param, HttpMethod method) {
+
+        private String SendGet(String uri, BaseParam param) {
             String data = ParamToFormData.TransferFormData(param);
 
-            // Method가 GET인 경우, uri에 data를 붙인다.
-            if (method == HttpMethod.GET && !String.IsNullOrWhiteSpace(data)) {
+            if (String.IsNullOrWhiteSpace(data)) {
                 uri += $"?{data}";
             }
+
+            var request = HttpWebRequest.Create(uri) as HttpWebRequest;
+
+            request.CookieContainer = cookieContainer;
+            request.Method = "GET";
+            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 5.1.1; Nexus 4 Build/LMY48T)";
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            var response = request.GetResponse();
+
+            return GetResponseString(0, response.GetResponseStream());
+
+        }
+
+        private String SendPost(String uri, BaseParam param) {
+            String data = ParamToFormData.TransferFormData(param);
             
             var request = HttpWebRequest.Create(uri) as HttpWebRequest;
 
             request.CookieContainer = cookieContainer;
-            request.Method = method.ToString();
+            request.Method = "POST";
             request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 5.1.1; Nexus 4 Build/LMY48T)";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            if (method == HttpMethod.POST && !String.IsNullOrWhiteSpace(data)) {
+            if (!String.IsNullOrWhiteSpace(data)) {
                 var buffer = Encoding.UTF8.GetBytes(data);
 
                 request.GetRequestStream().Write(buffer, 0, buffer.Length);

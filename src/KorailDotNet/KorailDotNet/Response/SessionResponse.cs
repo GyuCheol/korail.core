@@ -8,22 +8,13 @@ using System.Threading.Tasks;
 namespace KorailDotNet.Response {
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class SessionResponse {
+    public class SessionResponse: ResponseBase {
 
         [JsonProperty("strAthnFlg")]
         public String Flag { get; set; }
 
         [JsonProperty("strDiscCouponFlg")]
         public String DiscCouponFlag { get; set; }
-
-        [JsonProperty("h_msg_txt")]
-        public String Message { get; set; }
-
-        [JsonProperty("h_msg_cd")]
-        public String MessageCode { get; set; }
-
-        [JsonProperty("strResult")]
-        public String Result { get; set; }
 
         [JsonProperty("Key")]
         public String Key { get; set; }

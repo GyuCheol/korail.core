@@ -27,7 +27,7 @@ namespace KorailDotNet.Tests
             var param = GetLoginParam();
 
             // Act
-            korail.CreateSession(param);
+            korail.Login(param);
 
             // Assert
             Assert.Equal(true, korail.HasSession);
@@ -43,7 +43,7 @@ namespace KorailDotNet.Tests
 
             // Act
             try {
-                korail.CreateSession(param);
+                korail.Login(param);
             } catch (Exception) {
                 isError = true;
             }
@@ -66,7 +66,7 @@ namespace KorailDotNet.Tests
             };
 
             // Act
-            korail.CreateSession(loginParam);
+            korail.Login(loginParam);
             korail.SearchTrain(searchParam);
 
             // Assert
@@ -79,8 +79,8 @@ namespace KorailDotNet.Tests
             var loginParam = GetLoginParam();
 
             // Act
-            korail.CreateSession(loginParam);
-            korail.CloseSession();
+            korail.Login(loginParam);
+            korail.Logout();
 
             // Assert
             Assert.Equal(false, korail.HasSession);

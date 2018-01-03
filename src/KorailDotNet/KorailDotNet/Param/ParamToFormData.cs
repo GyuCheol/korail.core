@@ -9,9 +9,10 @@ using System.Web;
 
 namespace KorailDotNet.Param {
     public class ParamToFormData {
+        private const int STRING_CAPACITY_SIZE = 256;
 
         public static String TransferFormData(BaseParam param) {
-            var sb = new StringBuilder();
+            var sb = new StringBuilder(STRING_CAPACITY_SIZE);
 
             // param 인스턴스가 생성된 경우
             if(param != null) {

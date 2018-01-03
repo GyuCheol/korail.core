@@ -44,7 +44,7 @@ namespace KorailDotNet.Tests
             // Act
             try {
                 korail.Login(param);
-            } catch (Exception) {
+            } catch (System.Exception) {
                 isError = true;
             }
 

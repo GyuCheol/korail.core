@@ -16,9 +16,10 @@ namespace KorailDotNet.Tests
         private LoginParam GetLoginParam() {
             return new LoginParam() {
                 LoginType = LoginType.PhoneNumber,
-                MemberId = "010-2966-5905",
-                Password = "zhfpdlf123!" // �ڷ���123!
+                MemberId = "id",
+                Password = "pw"
             };
+            // id, pw 정보 config 파일로 주입하게 해야함.
         }
 
         [Fact(DisplayName = nameof(LoginSuccessTest))]
